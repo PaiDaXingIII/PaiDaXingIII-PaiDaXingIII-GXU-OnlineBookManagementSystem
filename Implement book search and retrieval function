@@ -1,0 +1,71 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class BookSearch {
+
+    private List<Book> bookList;
+
+    public BookSearch() {
+        bookList = new ArrayList<>();
+        // 这里可以添加一些初始化图书数据的代码，例如：
+        bookList.add(new Book(1, "Java核心技术", "Cay S. Horstmann", "9787111612419", 5));
+        bookList.add(new Book(2, "Effective Java", "Joshua Bloch", "9787115473802", 3));
+    }
+
+    // 根据标题查询图书
+    public List<Book> searchByTitle(String title) {
+        List<Book> result = new ArrayList<>();
+        for (Book book : bookList) {
+            if (book.getTitle().contains(title)) {
+                result.add(book);
+            }
+        }
+        return result;
+    }
+
+    // 根据作者查询图书
+    public List<Book> searchByAuthor(String author) {
+        List<Book> result = new ArrayList<>();
+        for (Book book : bookList) {
+            if (book.getAuthor().contains(author)) {
+                result.add(book);
+            }
+        }
+        return result;
+    }
+
+    // 根据ISBN查询图书
+    public List<Book> searchByIsbn(String isbn) {
+        List<Book> result = new ArrayList<>();
+        for (Book book : bookList) {
+            if (book.getIsbn().contains(isbn)) {
+                result.add(book);
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        BookSearch bookSearch = new BookSearch();
+        // 测试根据标题查询
+        List<Book> titleResult = bookSearch.searchByTitle("Java");
+        System.out.println("根据标题查询结果：");
+        for (Book book : titleResult) {
+            System.out.println(book.getTitle() + " - " + book.getAuthor());
+        }
+
+        // 测试根据作者查询
+        List<Book> authorResult = bookSearch.searchByAuthor("Joshua Bloch");
+        System.out.println("根据作者查询结果：");
+        for (Book book : authorResult) {
+            System.out.println(book.getTitle() + " - " + book.getAuthor());
+        }
+
+        // 测试根据ISBN查询
+        List<Book> isbnResult = bookSearch.searchByIsbn("9787111612419");
+        System.out.println("根据ISBN查询结果：");
+        for (Book book : isbnResult) {
+        System.out.println(book.getTitle() + " - " + book.getAuthor());
+        }
+    }
+}
