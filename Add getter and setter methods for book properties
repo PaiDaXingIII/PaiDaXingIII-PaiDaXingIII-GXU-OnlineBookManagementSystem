@@ -1,0 +1,78 @@
+public class Book {
+    private int id;
+    private String title;
+    private String author;
+    private String isbn;
+    private int availableCopies;
+
+    // 构造函数
+    public Book(int id, String title, String author, String isbn, int availableCopanks) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.availableCopies = availableCopanks;
+    }
+
+    // 默认构造函数
+    public Book() {
+    }
+
+    // Getter和Setter方法
+
+    // 获取图书ID
+    public int getId() {
+        return id;
+    }
+
+    // 设置图书ID
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    // 获取图书标题
+    public String getTitle() {
+        return title;
+    }
+
+    // 设置图书标题
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    // 获取图书作者
+    public String getAuthor() {
+        return author;
+    }
+
+    // 设置图书作者
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    // 获取图书ISBN编号
+    public String getIsbn() {
+        return isbn;
+    }
+
+    // 设置图书ISBN编号
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    // 获取图书可借阅副本数量
+    public int getAvailableCopies() {
+        return availableCopies;
+    }
+
+    // 设置图书可借阅副本数量
+    public void setAvailableCopies(int availableCopies) {
+        this.availableCopies = availableCopies;
+    }
+
+    // 可以添加其他业务逻辑方法，例如：
+    // 判断图书是否可借阅
+    public boolean isAvailable() {
+        return availableCopies > 0;
+    }
+}
