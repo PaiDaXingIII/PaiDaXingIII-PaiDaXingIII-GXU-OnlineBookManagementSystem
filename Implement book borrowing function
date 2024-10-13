@@ -1,0 +1,91 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class BookReservationQueue {
+
+    private Map<Book, List<User>> reservationQueue; // 图书与预约读者列表的映射
+    private Map<Book, Integer> availableCopies; // 图书与当前可借阅副本数量的映射
+
+    public BookReservationQueue() {
+        reservationQueue = new HashMap<>();
+        availableCopies = new HashMap<>();
+        // 初始化图书数据及可借阅副本数量
+        Book book1 = new Book(1, "Java核心技术", "Cay S. Horstmann", "9787111612419", 5);
+        Book book2 = new Book(2, "Effective Java", "Joshua Bloch", "9787115473802", 3);
+        availableCopies.put(book1, 5);
+        availableCopies.put(book2, 3);
+    }
+
+    // 读者预约图书
+    public void reserveBook(User user, Book book) {
+        if (availableCopies.get(book) > 0) {
+            // 如果有可借阅副本，直接借阅，不进入预约队列
+            availableCopies.put(book, availableCopies.get(book) - 1);
+        } else {
+            // 如果没有可借阅副本，进入预约队列
+            List<User> queue = reservationQueue.getOrDefault(book, new ArrayList<>());
+            queue.add(user);
+            reservationQueue.put(book, queue);
+        }
+    }
+
+    // 归还图书时处理预约队列
+    public void returnBook(Book book) {
+        int availableCopy = availableCopies.get(book) + 1;
+        availableCopies.put(book, availableCopy);
+        if (reservationQueue.containsKey(book) &&!reservationQueue.get(book).isEmpty()) {
+            // 如果预约队列中有读者，将图书借给队列中的第一个读者
+            User user = reservationQueue.get(book).remove(0);
+            availableCopies.put(book, availableCopies.get(book) - 1);
+        }
+    }
+
+    // 根据图书ID查找图书
+    private Book findBookById(int bookId) {
+        // 这里假设通过某种方式可以获取所有图书对象，然后查找ID匹配的图书
+        // 实际应用中可能从数据库获取图书列表
+        Book book = null;
+        for (Book b : availableCopies.keySet()) {
+            if (b.getId() == bookId) {
+                book = b;
+                break;
+            }
+        }
+        return book;
+    }
+
+    // 根据用户ID查找用户
+    private User findUserById(int userId) {
+        // 假设通过某种方式可以获取所有用户对象，然后查找ID匹配的用户
+        // 实际应用中可能从数据库获取用户列表
+        User user = null;
+        for (User u : userList) {
+            if (u.getId() == userId) {
+                user = u;
+                break;
+            }
+        }
+        return user;
+    }
+
+    public static void main(String[] args) {
+        BookReservationQueue queue = new BookReservationQueue();
+        User user1 = new User(1, "user1", "password1", "student");
+        User user2 = new User(2, "Tests with different data structures and algorithms for 5-HT3 receptors agonists.--1000.--", "password2", "teacher");
+        Book book1 = queue.findBookById(1);
+        Book book2 = queue.findBookById(2);
+
+        // 用户1预约图书1
+        queue.reserveBook(user1, book1);
+        // 用户2预约图书2
+        queue.reserveBook(user2, book2);
+
+        // 归还图书1
+        queue.returnBook(book1);
+
+        // 再次归还图书1（模拟错误归还情况，此时不应再有读者借阅，可用于测试逻辑）
+        queue.returnBook(book1);
+    }
+}
