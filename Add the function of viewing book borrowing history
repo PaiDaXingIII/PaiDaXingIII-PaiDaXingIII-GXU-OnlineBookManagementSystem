@@ -1,0 +1,86 @@
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class BookLending {
+
+    private List<Book> bookList;
+    private List<Borrowing> borrowingList;
+
+    public BookLending() {
+        bookList = new ArrayList<>();
+        borrowingList = new ArrayList<>();
+        // 初始化一些图书数据
+        bookList.add(new Book(1, "Java核心技术", "Cay S. Horstmann", "9787111612419", 5));
+        bookList.add(new Book(2, "Effective Java", "Joshua Bloch", "9787115473802", 3));
+    }
+
+    // 借阅图书方法
+    public boolean lendBook(int bookId, int userId) {
+        Book book = findBookById(bookId);
+        if (book == null) {
+            return false;
+        }
+        if (!book.isAvailable()) {
+            return false;
+        }
+        book.setAvailableCopies(book.getAvailableCopies() - 1);
+        Borrowing borrowing = new Borrowing(0, userId, bookId, new Date().getTime(), new Date().getTime() + (14 * 24 * 60 * 60 * 1000), 0);
+        borrowingList.add(borrowing);
+        return true;
+    }
+
+    // 根据ID查找图书
+    private Book findBookById(int id) {
+        for (Book book : bookList) {
+            if (book.getId() == id) {
+                return book;
+            }
+        }
+        return null;
+    }
+
+    // 归还图书方法
+    public boolean returnBook(int borrowingId) {
+        Borrowing borrowing = findBorrowingById(borrowingId);
+        if (borrowing == null) {
+            return false;
+        }
+        Book book = findBookById(borrowing.getBook_id());
+        if (book == null) {
+            return false;
+        }
+        book.setAvailableCopies(book.getAvailableCopies() + 1);
+        borrowing.setReturn_date(new Date().getTime());
+        return true;
+    }
+
+    // 根据ID查找借阅记录
+    private Borrowing findBorrowingById(int id) {
+        for (Borrowing borrowing : borrowingList) {
+            if (borrowing.getId() == id) {
+                return borrowing;
+            }
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        BookLending bookLending = new BookLending();
+        // 测试借阅图书
+        boolean lendResult = bookLending.lendBook(1, 1);
+        if (lendResult) {
+            System.out.println("图书借阅成功");
+        } else {
+            System.out.println("图书借阅失败");
+        }
+
+        // 测试归还图书
+        boolean returnResult = bookLending.returnBook(0);
+        if (returnResult) {
+            System.out.println("图书归还成功");
+        } else {
+        System.out.println("图书归还失败");
+        }
+    }
+}
